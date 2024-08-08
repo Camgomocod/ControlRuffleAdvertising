@@ -7,6 +7,7 @@ class Server:
         self.port = port
         self.client_socket = None
         self.server_socket = None
+        # Está sección del código es para que para que los comand se envien en el mismo puerto 
         self.server_thread = threading.Thread(target=self.start_server)
         self.server_thread.daemon = True
         self.server_thread.start()
