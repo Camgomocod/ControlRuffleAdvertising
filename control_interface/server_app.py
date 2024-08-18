@@ -1,5 +1,4 @@
 import tkinter as tk
-from server.connection import Server
 
 class ServerApp:
     def __init__(self, master, server):
@@ -9,11 +8,11 @@ class ServerApp:
 
         self.server = server
 
-        tk.Button(self.master, text="Mostrar Suma", command=self.send_add_command).pack(pady=10)
-        tk.Button(self.master, text="Mostrar División", command=self.send_divide_command).pack(pady=10)
+        tk.Button(self.master, text="Sorteo", command=self.send_add_command).pack(pady=10)
+        tk.Button(self.master, text="Publicidad", command=self.send_divide_command).pack(pady=10)
 
     def send_add_command(self):
-        self.server.send_command("add")
+        self.server.send_command("sorteo")
 
     def send_divide_command(self):
-        self.server.send_command("divide")
+        self.server.send_command("publicidad")
