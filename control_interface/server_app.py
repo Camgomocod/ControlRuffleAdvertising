@@ -1,6 +1,5 @@
 import tkinter as tk
 from tkinter import PhotoImage
-from PIL import Image, ImageTk
 from control_interface.settings import *
 
 class ServerApp:
