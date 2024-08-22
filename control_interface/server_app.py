@@ -83,6 +83,11 @@ class ServerApp:
     def send_exit_command(self ):
         self.server.send_command("salir")
         self.label_state.config(text='ESPERANDO', bg=COOL_GRAY)
+        self.enable_button(self.button_advertising)
+        self.enable_button(self.button_slot)
+        self.change_color(self.button_advertising, COOL_GRAY, CHARTREUSE)
+        self.change_color(self.button_slot, NEON_ORANGE, COOL_GRAY)
+        
 
     def enable_button(self, button):
         button.config(state=tk.NORMAL)
