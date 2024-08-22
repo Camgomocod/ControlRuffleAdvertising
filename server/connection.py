@@ -1,5 +1,6 @@
 import socket
 import threading
+import time 
 from control_interface.settings import *
 
 class Server:
@@ -23,6 +24,8 @@ class Server:
 
         while True:
             self.client_socket, addr = self.server_socket.accept()
+            if addr:
+                self.app.label_state.config(text='CONECTADO', bg=AQUAMARINE)
             print(f"Conexión aceptada de {addr}")
             threading.Thread(target=self.handle_client, args=(self.client_socket,)).start()
 
@@ -31,8 +34,6 @@ class Server:
             try:
                 message = client_socket.recv(1024).decode()
                 if message:
-                    print(f"Comando recibido desde Raspberry Pi: {message}")
-                    # Responder al cliente si es necesario
                     if message == 'True B':
                         self.app.change_color(self.app.button_advertising, COOL_GRAY, CHARTREUSE)
                         self.app.enable_button(self.app.button_state_slot)
@@ -47,11 +48,25 @@ class Server:
                         self.app.disable_button(self.app.button_state_slot)
                         self.app.disable_hover(self.app.button_state_slot)
                         self.app.change_color(self.app.button_advertising, NEON_ORANGE, NEON_ORANGE)
-                        
+                        self.app.update_label(self.app.label, 'ESTADO')
+                        self.app.label.config(bg=COOL_GRAY)
+                    if message == 'GANADOR':
+                        self.app.update_label(self.app.label, message)
+                        self.app.label.config(bg=AQUAMARINE)
+                        time.sleep(4)
+                        self.app.enable_button(self.app.button_state_slot)
+                    if message == 'PERDEDOR':
+                        self.app.update_label(self.app.label, message)
+                        time.sleep(4)
+                        self.app.enable_button(self.app.button_state_slot)
+                    if message == 'PROCESANDO...':
+                        self.app.update_label(self.app.label, message)
+                        self.app.disable_button(self.app.button_state_slot)
                         
                     client_socket.send(f"Comando {message} recibido en el PC".encode())
 
             except Exception as e:
+                self.app.label_state.config(text='DESCONECTADO', bg=NEON_ORANGE)
                 print(f"Error en la conexión: {e}")
                 client_socket.close()
                 break

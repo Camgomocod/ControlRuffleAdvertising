@@ -24,9 +24,9 @@ class ServerApp:
 
         self.button_slot = tk.Button(self.container, text="Sorteo", command=self.send_add_command, bg=COOL_GRAY, bd=4, relief='raised', state=tk.NORMAL)
         self.button_advertising = tk.Button(self.container, text="Publicidad", command=self.send_divide_command, bg=CHARTREUSE, bd=4, relief='raised')
-        self.button_exit = tk.Button(self.master, text="SALIR", command=self.close_window, bg=NEON_ORANGE, bd=4, relief='raised')        
-        self.label = tk.Label(self.container, text='Esperando...', font=None, bd=2, relief="solid", bg=COOL_GRAY)
-
+        self.button_exit = tk.Button(self.master, text="SALIR", command=self.send_exit_command, bg=NEON_ORANGE, bd=4, relief='raised')        
+        self.label = tk.Label(self.container, text='ESTADO', font=None, bd=2, relief="solid", bg=COOL_GRAY)
+        self.label_state = tk.Label(self.master, text='ESPERANDO', font=None, bd=2, relief="solid", bg=COOL_GRAY)
 
         # Configurar los botones 
         self.button_slot.grid(row=0, column=0, padx=10, pady=5, sticky="nsew")
@@ -34,6 +34,7 @@ class ServerApp:
         self.button_state_slot.grid(row=1, column=0, padx=10, pady=10, sticky="nsew")
         self.button_exit.grid(row=2, columnspan=2, padx=40, pady=10, sticky="nsew")
         
+        self.label_state.grid(row=1, padx=10)
         self.label.grid(row=1, column=1, padx=10, pady=10, sticky="nsew")
 
         # Configurar las filas y las columnas 
@@ -57,7 +58,6 @@ class ServerApp:
         # Cambiar de estado 
         self.state = False
     
-
     def configure_hover(self, button, color1, color2):
         button.bind('<Enter>', lambda e: button.config(bg=color1))
         button.bind('<Leave>', lambda e: button.config(bg=color2))
@@ -66,12 +66,13 @@ class ServerApp:
         button.unbind('<Enter>')
         button.unbind('<Leave>')
 
-
     def close_window(self):
         pass 
 
     def send_button_command(self):
         self.server.send_command("button")
+        self.update_label(self.label, 'ESTADO')
+        self.label.config(bg=COOL_GRAY)
 
     def send_add_command(self):
         self.server.send_command("sorteo")
@@ -79,6 +80,10 @@ class ServerApp:
     def send_divide_command(self):
         self.server.send_command("publicidad")
     
+    def send_exit_command(self ):
+        self.server.send_command("salir")
+        self.label_state.config(text='ESPERANDO', bg=COOL_GRAY)
+
     def enable_button(self, button):
         button.config(state=tk.NORMAL)
     
@@ -88,4 +93,7 @@ class ServerApp:
     def change_color(self, button, hover_color, normal_color):
         button.config(bg=normal_color)  # Cambiar el color del botón inmediatamente
         self.configure_hover(button, hover_color, normal_color)
+
+    def update_label(self, label, text):
+        label.config(text=text)
 
