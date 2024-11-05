@@ -1,7 +1,7 @@
 import socket
 import threading
 import time 
-from control_interface.settings import *
+from control_interface.settings import CHARTREUSE, AQUAMARINE, NEON_ORANGE, COOL_GRAY
 
 class Server:
     def __init__(self, app, host='0.0.0.0', port=9999):
@@ -15,7 +15,7 @@ class Server:
         self.command = None 
         self.app = app
         
-
+    # Se define el socket del server por los que se va a mandar los mensjaes 
     def start_server(self):
         self.server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.server_socket.bind((self.host, self.port))
