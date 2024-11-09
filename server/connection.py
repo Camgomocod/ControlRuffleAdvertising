@@ -1,7 +1,7 @@
 import socket
 import threading
 import time
-from control_interface.settings import CHARTREUSE, AQUAMARINE, NEON_ORANGE, COOL_GRAY
+from control_interface.settings import CHARTREUSE, AQUAMARINE, NEON_ORANGE, COOL_GRAY, BLACK
 
 class Server:
     def __init__(self, app, host='0.0.0.0', port=9999):
@@ -41,7 +41,10 @@ class Server:
             self.client_socket, addr = self.server_socket.accept()  # Accept a connection
             if addr:
                 # Update the application label to show connection status
-                self.app.label_state.config(text='CONECTADO', bg=AQUAMARINE)
+                self.app.label_state.config(text='>  CONECTADO  <', bg=AQUAMARINE, fg=COOL_GRAY)
+
+            self.app.enable_button(self.app.button_advertising)
+            self.app.enable_button(self.app.button_slot)
             print(f"Conexión aceptada de {addr}")  # Print the address of the connected client
             threading.Thread(target=self.handle_client, args=(self.client_socket,)).start()  # Handle client in a new thread
 
@@ -58,8 +61,10 @@ class Server:
                 # Receive and handle messages from the client
                 message = client_socket.recv(1024).decode()  # Receive message from client
                 if message:
+                    
                     # Update the application state based on the received message
                     if message == 'True B':
+                        # change advertising to slot 
                         self.app.change_color(self.app.button_advertising, COOL_GRAY, CHARTREUSE)
                         self.app.enable_button(self.app.button_state_slot)
                         self.app.enable_button(self.app.button_advertising)
@@ -67,6 +72,7 @@ class Server:
                         self.app.change_color(self.app.button_slot, NEON_ORANGE, NEON_ORANGE)
                         self.app.change_color(self.app.button_state_slot, NEON_ORANGE, COOL_GRAY)
                     if message == 'True A':
+                        # change slot to advertising
                         self.app.change_color(self.app.button_slot, NEON_ORANGE, COOL_GRAY)
                         self.app.enable_button(self.app.button_slot)
                         self.app.disable_button(self.app.button_advertising)
@@ -77,7 +83,7 @@ class Server:
                         self.app.label.config(bg=COOL_GRAY)
                     if message == 'GANADOR':
                         self.app.update_label(self.app.label, message)
-                        self.app.label.config(bg=AQUAMARINE)
+                        self.app.label.config(bg=CHARTREUSE)
                         time.sleep(4)  # Wait for 4 seconds before enabling the button again
                         self.app.enable_button(self.app.button_state_slot)
                     if message == 'PERDEDOR':
@@ -92,8 +98,11 @@ class Server:
                     client_socket.send(f"Comando {message} recibido en el PC".encode())
 
             except Exception as e:
+                
                 # Handle disconnection and update the application state
-                self.app.label_state.config(text='DESCONECTADO', bg=NEON_ORANGE)
+                self.app.label_state.config(text='  DESCONECTADO  ', bg=NEON_ORANGE, fg=BLACK)
+                self.app.disable_button(self.app.button_slot)
+                self.app.disable_button(self.app.button_advertising)
                 print(f"Error en la conexión: {e}")  # Print the error
                 client_socket.close()  # Close the client socket
                 break  # Exit the loop
