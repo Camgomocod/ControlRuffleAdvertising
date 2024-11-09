@@ -1,7 +1,7 @@
 import socket
 import threading
 import time
-from control_interface.settings import CHARTREUSE, AQUAMARINE, NEON_ORANGE, COOL_GRAY, BLACK
+from interface.settings import CHARTREUSE, AQUAMARINE, NEON_ORANGE, COOL_GRAY, BLACK
 
 class Server:
     def __init__(self, app, host='0.0.0.0', port=9999):

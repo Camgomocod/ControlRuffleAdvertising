@@ -1,6 +1,6 @@
 import tkinter as tk
 from tkinter import PhotoImage
-from control_interface.settings import AQUAMARINE, COOL_GRAY, NEON_ORANGE, CHARTREUSE, BLACK
+from interface.settings import AQUAMARINE, COOL_GRAY, NEON_ORANGE, CHARTREUSE, BLACK
 
 class ServerApp:
     """
@@ -25,7 +25,7 @@ class ServerApp:
         self.master.resizable(False, False)
 
         # Set the window icon
-        self.icon_image = PhotoImage(file="control_interface/assets/icon_plant.png")
+        self.icon_image = PhotoImage(file="interface/assets/icon_plant.png")
         self.master.iconphoto(False, self.icon_image)
 
         self.server = server
